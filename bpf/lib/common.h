@@ -444,6 +444,10 @@ enum {
  * overlap with MARK_MAGIC_KEY_ID.
  */
 #define MARK_MAGIC_SNAT_DONE		0x1500
+/* MARK_MAGIC_IPIP_DONE can overlap with MARK_MAGIC_SNAT_DONE with both being
+ * mutual exclusive.
+ */
+#define MARK_MAGIC_IPIP_DONE		MARK_MAGIC_SNAT_DONE
 
 /* IPv4 option used to carry service addr and port for DSR. Lower 16bits set to
  * zero so that they can be OR'd with service port.
@@ -673,6 +677,10 @@ struct lb6_backend {
 	__u8 pad;
 };
 
+struct lb6_health {
+	struct lb6_backend peer;
+};
+
 struct lb6_reverse_nat {
 	union v6addr address;
 	__be16 port;
@@ -720,6 +728,10 @@ struct lb4_backend {
 	__be16 port;		/* L4 port filter */
 	__u8 proto;		/* L4 protocol, currently not used (set to 0) */
 	__u8 pad;
+};
+
+struct lb4_health {
+	struct lb4_backend peer;
 };
 
 struct lb4_reverse_nat {

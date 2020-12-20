@@ -635,3 +635,19 @@ func SkipK8sVersions(k8sVersions string) bool {
 	constraint := versioncheck.MustCompile(k8sVersions)
 	return constraint(k8sVersion)
 }
+
+// DualStackSupported returns whether the current environment has DualStack IPv6
+// enabled or not for the cluster.
+func DualStackSupported() bool {
+	k8sVersion := GetCurrentK8SEnv()
+	switch k8sVersion {
+	// Add kubernetes versions for which we add dual stack support.
+	case "1.18", "1.19", "1.20":
+		// We only have DualStack enabled in Vagrant test env.
+		if GetCurrentIntegration() == "" {
+			return true
+		}
+	}
+
+	return false
+}
